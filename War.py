@@ -1,29 +1,75 @@
 __author__ = 'luke'
 import random
 
-class Deck():
-    def build(self):
-        cards = []
-        for suit in ["h","s","c","d"]:
-            for i in range(1,14):
-                cards.append(i)
-        return cards
-    def shuffle(self):
-        random.shuffle(self.cards)
-        return self.cards
+from deck import Deck
+from hand import Hand
+from cards import Card
+from players import Player
+
+# get shuffeled deck
+deck = Deck()
+
+# get Players
+luke = Player("luke")
+toni = Player("toni")
+
+# deal cards
+while len(deck.cards) > 0:
+    luke.recive_card(deck.deal_one())
+    toni.recive_card(deck.deal_one())
+
+print("lukes cards" + str(luke.deck))
+print("deck" + str(deck.cards))
+
+# start playing hands
+count = 0
+luke_max_cards = 0
+pile = []
+while (len(toni.deck) > 0) and (count < 2000000) and (len(luke.deck) > 0):
+    lukes_card = Card(luke.top_card())
+    tonis_card = Card(toni.top_card())
+    print(lukes_card.name + " vs " + tonis_card.name)
+    pile.append(luke.give_top_card())
+    pile.append(toni.give_top_card())
+    if lukes_card.rank > tonis_card.rank:
+        luke.deck.extend(pile)
+        pile = []
+        print("luke wins")
+    elif tonis_card.rank > lukes_card.rank:
+        toni.deck.extend(pile)
+        pile = []
+        print("toni wins")
+    else:
+        print("WARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWARWAR")
+        pile.append(luke.give_top_card())
+        pile.append(toni.give_top_card())
+        pile.append(luke.give_top_card())
+        pile.append(toni.give_top_card())
+        pile.append(luke.give_top_card())
+        pile.append(toni.give_top_card())
+
+    count = count + 1
+    print("{} is the number of hand played".format(str(count)))
+    # print("lukes max cards " + str(luke_max_cards))
+    print("toni has :{} cards and Luke has :{} cards and there a {} in the pile".format(len(toni.deck), len(luke.deck),
+          len(pile)))
+
+    number = len(luke.deck) + len(toni.deck) + len(pile)
+    if luke_max_cards < len(luke.deck):
+        luke_max_cards = len(luke.deck)
+
+    print("number of cards in decks " + str(number))
+    print("tonis cards" + str(toni.deck))
+    print("lukes cards" + str(luke.deck))
 
 
-    def __init__(self):
-        self.cards = self.build()
-        self.shuffle(self.cards)
+
+print(luke_max_cards)
+print("tonis cards" + str(toni.deck))
+print("lukes cards" + str(luke.deck))
 
 
-game = Deck()
-print game.cards
-game.shuffle()
 
-
-#
 #     deck = []
 #     player1_deck = []
 #     player2_deck = []
